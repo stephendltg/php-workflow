@@ -56,10 +56,12 @@ __Close your terminal et re-open this__
 **Docker list container:**
 > make ps
 
-**Dckers containres logs:**
+**Dockers containers logs:**
 > make logs
+> make logs server
 
-
+**Docker container bash:**
+> make bash server
 
 Enjoy use composer in bash
 
