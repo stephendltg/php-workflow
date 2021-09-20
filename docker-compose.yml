@@ -48,29 +48,6 @@ services:
     # ---------------------------------
     # SERVER
     # ---------------------------------
-    # server:
-    #   hostname: server
-    #   build: .
-    #   restart: always
-    #   user: '${USER_ID}:${GROUP_ID}'
-    #   links:
-    #     - mariadb
-    #   labels:
-    #     - "traefik.http.routers.${NAME:-app}.rule=PathPrefix(`/`)"
-    #     - traefik.http.services.${NAME:-app}.loadBalancer.sticky.cookie.name=server_id
-    #     - traefik.http.services.${NAME:-app}.loadBalancer.sticky.cookie.httpOnly=true
-    #   volumes:
-    #     - vol-server-data:/usr/src/app/static
-    #     - ./app:/app/web
-    #   depends_on:
-    #     maria-db:
-    #     condition: service_healthy
-
-    # ---------------------------------
-    # LARAVEL
-    # 
-    # git clone https://github.com/laravel/laravel.git laravel
-    # ---------------------------------
     server:
       hostname: server
       build: .
@@ -82,74 +59,12 @@ services:
         - "traefik.http.routers.${NAME:-app}.rule=PathPrefix(`/`)"
         - traefik.http.services.${NAME:-app}.loadBalancer.sticky.cookie.name=server_id
         - traefik.http.services.${NAME:-app}.loadBalancer.sticky.cookie.httpOnly=true
-      command: bash -c "
-        composer install
-        && php artisan serve --host=0.0.0.0 --port=8000"
       volumes:
-        - ./laravel:/app/web
-      ports:
-        - "8000:8000"
+        - vol-server-data:/usr/src/app/static
+        - ./app:/app/web
       depends_on:
         maria-db:
-          condition: service_healthy
-
-    # ---------------------------------
-    # DRUPAL
-    # ---------------------------------
-    # server:
-    #   hostname: server
-    #   image: drupal
-    #   restart: always
-    #   volumes:
-    #     - /drupal/modules:/opt/drupal/web/modules
-    #     - /drupal/profiles:/opt/drupal/web/profiles
-    #     - /drupal/themes:/opt/drupal/web/themes
-    #   links:
-    #     - mariadb
-    #   labels:
-    #     - "traefik.http.routers.${NAME:-app}.rule=PathPrefix(`/`)"
-    #     - traefik.http.services.${NAME:-app}.loadBalancer.sticky.cookie.name=server_id
-    #     - traefik.http.services.${NAME:-app}.loadBalancer.sticky.cookie.httpOnly=true
-    #   depends_on:
-    #     maria-db:
-    #     condition: service_healthy
-
-    # ---------------------------------
-    # WORDPRESS
-    # ---------------------------------
-    # server:
-    #   hostname: server
-    #   image: wordpress:${WORDPRESS_VERSION:-latest}
-    #   restart: on-failure
-    #   environment:
-    #     WORDPRESS_DB_HOST: mariadb:3306
-    #     WORDPRESS_DB_NAME: ${DB_NAME:-database}
-    #     WORDPRESS_DB_USER: ${DB_USER:-user}
-    #     WORDPRESS_DB_PASSWORD: ${DB_PASSWORD:-user}
-    #     WORDPRESS_TABLE_PREFIX: ${TABLE_PREFIX:-wp_}
-    #     WORDPRESS_CONFIG_EXTRA: |
-    #       define('FS_METHOD','direct');
-    #       define('WP_DEBUG_LOG', true);
-    #       define('WP_AUTO_UPDATE_CORE', false);
-    #       define('WP_POST_REVISIONS', false);
-    #       define('DISALLOW_FILE_EDIT', true);
-    #       define('DISALLOW_FILE_MODS', true);
-    #       define('WPMU_PLUGIN_DIR', ABSPATH . 'mu-plugins');
-    #       define('WPMU_PLUGIN_URL', '/mu-plugins');
-    #       define('WP_PLUGIN_DIR', ABSPATH . 'plugins');
-    #   working_dir: /var/www/html
-    #   volumes:
-    #     - ./wordpress/mu-plugins:/var/www/html/mu-plugins
-    #     - ./wordpress/themes:/var/www/html/wp-content/themes
-    #     - ./wordpress/plugins:/var/www/html/plugins
-    #     - ./conf/uploads.ini:/usr/local/etc/php/conf.d/uploads.ini
-    #   labels:
-    #     - "traefik.http.routers.${NAME:-app}.rule=PathPrefix(`/`)"
-    #     - traefik.http.services.${NAME:-app}.loadBalancer.sticky.cookie.name=server_id
-    #     - traefik.http.services.${NAME:-app}.loadBalancer.sticky.cookie.httpOnly=true
-    #   depends_on:
-    #     maria-db:
-    #     condition: service_healthy
+        condition: service_healthy
 
     # ---------------------------------
     # Tools dev or integration

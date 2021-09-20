@@ -1,30 +1,20 @@
 {
-  "name": "php-sample",
+  "name": "php-workflow",
   "version": "0.0.1",
-  "description": "Php app",
+  "description": "Php workflow",
   "main": "index.js",
   "scripts": {
-    "test": "mocha --exit -t 10000 -R spec",
-    "migrate": "knex migrate:latest",
-    "migrate:seed": "knex seed:run",
-    "migrate:drop": "knex migrate:rollback --all",
-    "migrate:down": "knex migrate:down"
+    "test": "mocha --exit -t 10000 -R spec"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/stephendltg/php-samples.git"
+    "url": "git+https://github.com/stephendltg-bzh/php-workflow.git"
   },
   "author": "stephendltg",
   "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/stephendltg/yoonest-sample/issues"
-  },
-  "homepage": "https://github.com/stephendltg/php-samples#readme",
   "devDependencies": {
     "dotenv": "^9.0.0",
-    "knex": "^0.95.4",
     "mocha": "^8.4.0",
-    "mysql": "^2.18.1",
     "supertest": "^6.1.3"
   }
 }
