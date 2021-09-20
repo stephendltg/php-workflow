@@ -70,9 +70,6 @@ Enjoy use composer in bash
 
 > make svn
 
-### MIGRATE DATABASE
-
-
 ---
 
 ## DATABASE
@@ -88,5 +85,3 @@ sudo scripts/mariadb_backup.sh
 ```bash
 sudo scripts/mariadb_restore.sh
 ```
-
----
