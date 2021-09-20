@@ -10,7 +10,7 @@ ifeq ($(isDocker), 1)
 	dc := USER_ID=$(user) GROUP_ID=$(group) docker-compose
 	de := docker-compose exec
 	dr := $(dc) run --rm
-	sy := $(de) php bin/console
+	sy := $(de) server bin/console
 	php := $(dr) --no-deps php
 else
 	sy := php bin/console
@@ -73,12 +73,16 @@ ps:
 logs:
 	@docker-compose logs -f $(filter-out $@,$(MAKECMDGOALS))
 
+## Bash	:	shell container.
+##		ex: bash server	: shell server container
+bash:
+	$(de) $(filter-out $@,$(MAKECMDGOALS)) sh
+
 nvm:
 	curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/${NVM}/install.sh | bash
 
 svn:
 	bash scripts/release.sh
-
 
 help: 
 	@echo "install: Install ${PROJECT}"

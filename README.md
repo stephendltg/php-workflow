@@ -1,4 +1,4 @@
-# php-sample
+# php-workflow
 
 ## POST INSTALL
 
@@ -19,16 +19,16 @@ sh scripts/install-docker-alpine.sh
 __Use Makefile:__
 
 ```bash
-sudo make production
+make production
 ```
 
 or
 
 ```bash
-sudo docker-compose up -d
+sudo docker-compose up
 ```
 
-And then point your browser to `http://localhost`.
+And then point your browser to `http://localhost:3000`.
 
 You can then scale the server to multiple instances:
 
@@ -52,12 +52,14 @@ __Close your terminal et re-open this__
 
 **Docker start:**
 > sudo make dev
-> docker ps -a
 
-__Get container name prefix:__  yoonest-sample_*
+**Docker list container:**
+> make ps
 
-ex:
-> docker exec -it yoonest-sample_server_1 bash
+**Dckers containres logs:**
+> make logs
+
+
 
 Enjoy use composer in bash
 
