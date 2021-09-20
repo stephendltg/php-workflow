@@ -1,0 +1,21 @@
+.git
+node_modules
+scripts
+traefik
+.ipynb_checkpoints/*
+Dockerfile
+.DS_Store
+.gitignore
+.gitattributes
+README.md
+env.*
+.nvmrc
+package.json
+package-lock.json
+migrations
+seeds
+knexfile.js
+
+# To prevent storing dev/temporary container data
+*.csv
+/tmp/*
