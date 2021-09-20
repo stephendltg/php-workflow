@@ -7,7 +7,6 @@
 node_modules/
 dist/
 logs/*.log
-laravel/vendor
 *.sqlite3
 
 # Compiled Java class files
