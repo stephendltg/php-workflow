@@ -1,4 +1,4 @@
-FROM php:8.0-apache
+FROM php:7.3-apache
 
 ENV COMPOSER_ALLOW_SUPERUSER=1
 
@@ -28,7 +28,9 @@ RUN apt-get update -qq && \
     apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 # PHP support GD
-RUN docker-php-ext-configure gd --with-freetype --with-jpeg
+# For PHP v8 only
+# RUN docker-php-ext-configure gd --with-freetype --with-jpeg
+RUN docker-php-ext-configure gd
 RUN docker-php-ext-install gd
 
 # PHP extensions
@@ -47,8 +49,8 @@ RUN pecl install apcu && docker-php-ext-enable apcu
 RUN pecl install redis && docker-php-ext-enable redis
 
 # Xdebug (disabled by default, but installed if required)
-RUN pecl install xdebug-2.9.7 && docker-php-ext-enable xdebug
-ADD conf/xdebug.ini /usr/local/etc/php/conf.d/
+# RUN pecl install xdebug-2.9.7 && docker-php-ext-enable xdebug
+# ADD conf/xdebug.ini /usr/local/etc/php/conf.d/
 
 
 # PHP configuration
@@ -58,10 +60,6 @@ COPY conf/php.ini /usr/local/etc/php/conf.d/app.ini
 COPY errors /errors
 COPY conf/vhost.conf /etc/apache2/sites-available/000-default.conf
 COPY conf/apache.conf /etc/apache2/conf-available/z-app.conf
-COPY info.php /app/web/info.php
-
-# On désactive xdebug for prod
-# RUN printf '%s%s' ";" "$(cat /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini)" > "/usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini"
 
 # ARG USER_ID
 # ARG GROUP_ID

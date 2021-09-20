@@ -18,10 +18,10 @@ services:
     # ---------------------------------
     # DB
     # ---------------------------------
-    mariadb:
-      container_name: mariadb
-      image: mariadb:10.5.9
-      hostname: mariadb
+    db:
+      container_name: db
+      image: mysql:8.0.19
+      hostname: db
       command: [
         '--character-set-server=utf8mb4',
         '--collation-server=utf8mb4_unicode_ci'
@@ -38,13 +38,7 @@ services:
         - '127.0.0.1:3306:3306'
       labels:
         - traefik.enable=false
-      healthcheck:
-        test: "/usr/bin/mysql --user=${DB_USER:-user} --password=${DB_PASS:-user} --execute \"SHOW DATABASES;\""
-        interval: 3s
-        timeout: 1s
-        retries: 5
       
-
     # ---------------------------------
     # SERVER
     # ---------------------------------
@@ -54,43 +48,23 @@ services:
       restart: always
       user: '${USER_ID}:${GROUP_ID}'
       links:
-        - mariadb
+        - db
       labels:
         - "traefik.http.routers.${NAME:-app}.rule=PathPrefix(`/`)"
         - traefik.http.services.${NAME:-app}.loadBalancer.sticky.cookie.name=server_id
         - traefik.http.services.${NAME:-app}.loadBalancer.sticky.cookie.httpOnly=true
       volumes:
-        - vol-server-data:/usr/src/app/static
         - ./app:/app/web
-      depends_on:
-        maria-db:
-        condition: service_healthy
+
 
     # ---------------------------------
     # Tools dev or integration
     # ---------------------------------
-    mysql-admin:
-      container_name: mysql-admin
-      hostname: mysql-admin
-      image: phpmyadmin/phpmyadmin:5.1.0
-      environment:
-        PMA_HOST: mariadb
-        PMA_PORT: 3306
-        MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD:-user}
-        PMA_USER: ${DB_USER:-user}
-        PMA_PASSWORD: ${DB_PASSWORD:-user}
-      ports:
-        - '127.0.0.1:3380:80'
-      restart: always
-      depends_on:
-        maria-db:
-        condition: service_healthy
-        
     adminer:
       image: adminer
       environment:
         ADMINER_DESIGN: pepa-linha
-        ADMINER_DEFAULT_SERVER: mariadb
+        ADMINER_DEFAULT_SERVER: db
       ports:
         - 8888:8080
         
@@ -101,6 +75,4 @@ services:
         
 volumes:
   vol-db-data:
-    driver: local
-  vol-server-data:
     driver: local

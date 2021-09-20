@@ -17,40 +17,30 @@ else
 	php :=
 endif
 
+## Install workflow for dev
 install: 
 	@echo "Installing node project ${PROJECT}..."
 	. ${NVM_DIR}/nvm.sh && nvm install ${NODE} && nvm use ${NODE}
 	npm install
 
-clean:
-	@echo "Clean project ${PROJECT}..."
-	rm -rf ./node_modules
-	sudo rm -rf ./laravel/vendor
-	docker-compose down -v
-
-production:
-	@echo "Production project ${PROJECT}..."
-	docker-compose up -d
-	sleep 5
-	sh scripts/mariadb_restore.sh
     
-.PHONY: devel
-devel: 
-	$(dc) up
+.PHONY: dev
+dev: 
+	$(dc) up -d --build
 
-dev:
-	@echo "Dev project ${PROJECT}..."
-	docker-compose up -d --build
-	sleep 5
-	npm run migrate
-	npm run migrate:seed
+.PHONY: clean
+clean:
+	rm -rf ./node_modules
+	$(dc) down -v
 
-stop:
-	@echo "Stop production project ${PROJECT}..."
-	docker-compose down
-
+.PHONY: destroy
 destroy:
-	docker-compose down -v --rmi all --remove-orphans
+	$(dc) down -v --rmi all --remove-orphans
+
+## Production: Pull image annd build environment
+production:
+	@echo "Pull & build containers for $(PROJECT)..."
+	$(dc) up
 
 ## start	:	Start containers without updating.
 start:
@@ -93,9 +83,5 @@ svn:
 help: 
 	@echo "install: Install ${PROJECT}"
 	@echo "dev: Start in development ${PROJECT}"
-	@echo "production: Start production ${PROJECT}"
-	@echo "stop: Stop production ${PROJECT}"
-	@echo "destroy: Destroy && delete network && volumes && images${PROJECT}"
 	@echo "clean: Clean ${PROJECT}"
-	@echo "nvm: NVM install${PROJECT}"
 	@echo "svn: Release app${PROJECT}"
