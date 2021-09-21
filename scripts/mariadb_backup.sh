@@ -5,4 +5,4 @@
 # description: backup mariadb
 # =======
 
-docker exec mariadb /usr/bin/mysqldump -u root --password=user database > mariadb.sql
+docker exec db /usr/bin/mysqldump -u root --password=user database > mariadb.sql

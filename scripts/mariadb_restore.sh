@@ -5,4 +5,4 @@
 # description: restore mariadb
 # =======
 
-cat mariadb.sql | docker exec -i mariadbdb /usr/bin/mysql -u root --password=user database
+cat mariadb.sql | docker exec -i db /usr/bin/mysql -u root --password=user database
