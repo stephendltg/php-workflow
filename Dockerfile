@@ -51,6 +51,10 @@ RUN pecl install redis && docker-php-ext-enable redis
 # Xdebug (disabled by default, but installed if required)
 # RUN pecl install xdebug-2.9.7 && docker-php-ext-enable xdebug
 # ADD conf/xdebug.ini /usr/local/etc/php/conf.d/
+RUN pecl install xdebug-3.1.3 \
+    && docker-php-ext-enable xdebug \
+    && echo "xdebug.mode=debug" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini \
+    && echo "xdebug.client_host=host.docker.internal" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
 
 
 # PHP configuration
