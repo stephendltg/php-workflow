@@ -55,6 +55,8 @@ services:
         - traefik.http.services.${NAME:-app}.loadBalancer.sticky.cookie.httpOnly=true
       volumes:
         - ./app:/app/web
+      extra_hosts:
+        - host.docker.internal:host-gateway
 
 
     # ---------------------------------
